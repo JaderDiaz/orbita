@@ -26,6 +26,7 @@ export type ClienteDetail = ClienteRow & {
     departamento: string;
     direccion: string | null;
     notas: string | null;
+    notas_html: string;
     numeracion: { factura: string; cotizacion: string };
     desde: string | null;
     usos: number;

@@ -218,6 +218,31 @@ class ClientesTest extends TestCase
         }
     }
 
+    public function test_the_detail_renders_notes_sanitized_on_the_server(): void
+    {
+        $cliente = Cliente::factory()->conContactoPrincipal()->create([
+            'notas' => "**Ojo** con [esto](javascript:alert(1)) y con <script>alert(2)</script>\n- [Portal](https://orbita.co)",
+        ]);
+
+        $this->actingAs(User::factory()->admin()->create())
+            ->get(route('clientes.show', $cliente))
+            ->assertInertia(function (Assert $page): void {
+                $html = $page->toArray()['props']['cliente']['notas_html'];
+
+                $this->assertStringContainsString('<strong>Ojo</strong>', $html);
+                $this->assertStringContainsString('href="https://orbita.co"', $html);
+
+                // The rejected link survives as literal text on purpose —
+                // nothing the user wrote disappears silently — but it is never
+                // an href.
+                $this->assertStringNotContainsString('href="javascript:', $html);
+                $this->assertStringContainsString('[esto](javascript:alert(1))', $html);
+
+                $this->assertStringNotContainsString('<script>', $html);
+                $this->assertStringContainsString('&lt;script&gt;', $html);
+            });
+    }
+
     public function test_an_unused_client_is_deleted_with_its_contacts(): void
     {
         $cliente = Cliente::factory()->conContactoPrincipal()->create();

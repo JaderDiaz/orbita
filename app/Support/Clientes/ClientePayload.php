@@ -6,6 +6,7 @@ use App\Enums\TipoPersona;
 use App\Models\CatalogValue;
 use App\Models\Cliente;
 use App\Models\ClienteContacto;
+use App\Support\Markdown\SafeMarkdown;
 
 /**
  * Shapes clientes for the screens.
@@ -55,6 +56,12 @@ class ClientePayload
             'departamento' => $cliente->departamento,
             'direccion' => $cliente->direccion,
             'notas' => $cliente->notas,
+
+            // Rendered on the server because this is what OTHER people read.
+            // The form's preview tab renders the same subset in the browser,
+            // but that is a convenience over your own unsaved text, never the
+            // trust boundary.
+            'notas_html' => SafeMarkdown::toHtml($cliente->notas),
             'numeracion' => self::numbering($cliente->tag),
             'desde' => $cliente->created_at?->translatedFormat('M Y'),
             'usos' => ClienteUsage::countFor($cliente->id),

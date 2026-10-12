@@ -242,12 +242,15 @@ export default function ClienteShow({ cliente }: Props) {
                                         Solo equipo
                                     </span>
                                 </div>
-                                {/* Rendered as text on purpose: the prototype
-                                    pushes these through dangerouslySetInnerHTML
-                                    with a hand-rolled markdown converter. */}
-                                <p className="text-muted-foreground mt-2 text-[13px] leading-relaxed whitespace-pre-wrap">
-                                    {cliente.notas}
-                                </p>
+                                {/* Sanitized on the server by SafeMarkdown:
+                                    escaped first, with link schemes allowlisted.
+                                    The prototype emitted raw hrefs here. */}
+                                <div
+                                    className="markdown text-muted-foreground mt-2 text-[13px] leading-relaxed"
+                                    dangerouslySetInnerHTML={{
+                                        __html: cliente.notas_html,
+                                    }}
+                                />
                             </section>
                         )}
                     </div>

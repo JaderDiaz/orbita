@@ -217,3 +217,72 @@
     border-color: var(--brand);
     box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.16);
 }
+
+/*
+ * Rendered notes. The HTML is produced by SafeMarkdown on the server and by
+ * features/clientes/markdown.ts for the editor's preview; both emit the same
+ * small subset, so one set of styles covers both.
+ */
+@layer base {
+    .markdown > * + * {
+        margin-top: 0.6em;
+    }
+
+    .markdown h3,
+    .markdown h4,
+    .markdown h5 {
+        color: var(--foreground);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+    }
+
+    .markdown h3 {
+        font-size: 1.15em;
+    }
+
+    .markdown h4 {
+        font-size: 1.05em;
+    }
+
+    .markdown ul,
+    .markdown ol {
+        padding-left: 1.25em;
+    }
+
+    .markdown ul {
+        list-style: disc;
+    }
+
+    .markdown ol {
+        list-style: decimal;
+    }
+
+    .markdown li::marker {
+        color: var(--text-tertiary);
+    }
+
+    .markdown strong {
+        color: var(--foreground);
+        font-weight: 600;
+    }
+
+    .markdown a {
+        color: var(--brand-text);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    .markdown code {
+        background: var(--surface-muted);
+        border-radius: 5px;
+        font-family: var(--font-mono);
+        font-size: 0.9em;
+        padding: 1px 5px;
+    }
+
+    .markdown blockquote {
+        border-left: 2px solid var(--brand-border);
+        color: var(--text-secondary);
+        padding-left: 0.75em;
+    }
+}
