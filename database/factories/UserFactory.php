@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\SystemRole;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -29,11 +30,39 @@ class UserFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'system_role' => SystemRole::Member,
+            'is_owner' => false,
             'remember_token' => Str::random(10),
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'two_factor_confirmed_at' => null,
         ];
+    }
+
+    /**
+     * The single protected owner of the installation.
+     */
+    public function owner(): static
+    {
+        return $this->state(fn (): array => [
+            'system_role' => SystemRole::Owner,
+            'is_owner' => true,
+        ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn (): array => ['system_role' => SystemRole::Admin]);
+    }
+
+    public function member(): static
+    {
+        return $this->state(fn (): array => ['system_role' => SystemRole::Member]);
+    }
+
+    public function client(): static
+    {
+        return $this->state(fn (): array => ['system_role' => SystemRole::Client]);
     }
 
     /**
