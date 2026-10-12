@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Navigation\SidebarNavigation;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,12 +36,21 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user,
+                'role' => $user?->system_role->value,
+                'roleLabel' => $user?->system_role->label(),
             ],
+            // Resolved server-side and already filtered: the client never
+            // decides which sections a role may see.
+            'navigation' => $user !== null
+                ? app(SidebarNavigation::class)->for($user)
+                : [],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

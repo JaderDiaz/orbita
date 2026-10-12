@@ -10,8 +10,12 @@ export type User = {
     [key: string]: unknown;
 };
 
+export type SystemRole = 'owner' | 'admin' | 'member' | 'client';
+
 export type Auth = {
     user: User;
+    role: SystemRole | null;
+    roleLabel: string | null;
 };
 
 
