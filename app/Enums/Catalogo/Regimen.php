@@ -13,7 +13,7 @@ use App\Support\Catalogo\SystemKey;
  */
 enum Regimen: string implements SystemKey
 {
-    case ResponsableIva = 'responsable-iva';
+    case ResponsableIva = 'responsable-de-iva';
 
     public function listKey(): string
     {

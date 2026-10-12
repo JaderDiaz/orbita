@@ -13,8 +13,9 @@ class DatabaseSeeder extends Seeder
     use WithoutModelEvents;
 
     /**
-     * Seeds the demo accounts declared in config/orbita.php, which is the same
-     * list the login screen offers as quick-fill while in debug mode.
+     * Seeds the catalog every other table references, then the demo accounts
+     * declared in config/orbita.php, which is the same list the login screen
+     * offers as quick-fill while in debug mode.
      *
      * updateOrCreate, not firstOrCreate: the seeder must also CORRECT an
      * account that already exists with the wrong role. firstOrCreate leaves an
@@ -22,6 +23,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(CatalogSeeder::class);
+
         $password = Hash::make((string) config('orbita.demo_password'));
 
         /** @var list<array{name: string, email: string, role: SystemRole}> $accounts */
