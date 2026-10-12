@@ -31,14 +31,19 @@ class UsageRegistry
     /**
      * Transactional columns that reference `catalog_values.id`.
      *
-     * Empty until the first business module lands, which is correct: nothing
-     * references the catalog yet, so every value genuinely has zero uses.
+     * Adding a module means adding a line here. The count it produces is what
+     * tells the Maestros screen whether to offer deleting a value or only
+     * deactivating it; the `on delete restrict` foreign key is what actually
+     * enforces the answer.
      *
      * @return list<array{table: string, column: string}>
      */
     public static function references(): array
     {
-        return [];
+        return [
+            ['table' => 'clientes', 'column' => 'tipo_documento_value_id'],
+            ['table' => 'clientes', 'column' => 'regimen_value_id'],
+        ];
     }
 
     /**

@@ -6,9 +6,10 @@ use App\Support\Catalogo\UsageRegistry;
 use PHPUnit\Framework\TestCase;
 
 /**
- * With no module referencing the catalog, the registry must answer without
- * touching the database at all. This runs with no application booted, which is
- * the proof: a query would fatal here.
+ * The registry's declared references are the contract between the catalog and
+ * the modules that consume it. Asserting them here, with no application booted,
+ * keeps a module from quietly dropping itself off the list and making its
+ * catalog values deletable again.
  */
 class UsageRegistryWithoutDatabaseTest extends TestCase
 {
@@ -26,11 +27,11 @@ class UsageRegistryWithoutDatabaseTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_an_empty_registry_reports_no_usage_without_querying(): void
+    public function test_every_consumer_of_the_catalog_is_declared(): void
     {
-        $this->assertSame([], UsageRegistry::references());
-        $this->assertSame([], UsageRegistry::counts());
-        $this->assertSame(0, UsageRegistry::countFor(1));
-        $this->assertFalse(UsageRegistry::isInUse(1));
+        $this->assertSame([
+            ['table' => 'clientes', 'column' => 'tipo_documento_value_id'],
+            ['table' => 'clientes', 'column' => 'regimen_value_id'],
+        ], UsageRegistry::references());
     }
 }

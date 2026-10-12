@@ -34,18 +34,29 @@ class UsageRegistryTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_with_no_module_referencing_the_catalog_nothing_is_in_use(): void
+    public function test_a_value_nothing_points_at_is_not_in_use(): void
     {
         $value = CatalogValue::factory()->create();
+
+        $this->assertSame(0, UsageRegistry::countFor($value->id));
+        $this->assertFalse(UsageRegistry::isInUse($value->id));
+    }
+
+    public function test_the_whole_catalog_is_counted_in_one_query(): void
+    {
+        CatalogValue::factory()->create();
+
+        UsageRegistry::flush();
 
         $queries = 0;
         DB::listen(function () use (&$queries): void {
             $queries++;
         });
 
-        $this->assertSame(0, UsageRegistry::countFor($value->id));
-        $this->assertFalse(UsageRegistry::isInUse($value->id));
-        $this->assertSame(0, $queries, 'Sin referencias declaradas no hay nada que consultar.');
+        UsageRegistry::counts();
+        UsageRegistry::counts();
+
+        $this->assertSame(1, $queries, 'El conteo se memoriza por request: una consulta, no una por valor.');
     }
 
     public function test_it_counts_real_references_in_one_query(): void
