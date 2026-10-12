@@ -346,7 +346,7 @@ export default function ClienteForm({ cliente, opciones }: Props) {
                             />
                         </div>
 
-                        <aside className="flex w-full max-w-full flex-[1_1_260px] flex-col gap-3.5 lg:max-w-[320px] lg:sticky lg:top-[84px]">
+                        <aside className="flex w-full max-w-full flex-[1_1_260px] flex-col gap-3.5 lg:max-w-[320px] lg:sticky lg:top-content-offset">
                             <ResumenCard
                                 values={values}
                                 tipoDocumento={nombreDe(

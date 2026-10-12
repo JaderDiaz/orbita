@@ -23,7 +23,7 @@ export function ListRail({
     const groups = groupLists(lists);
 
     return (
-        <aside className="w-full shrink-0 lg:sticky lg:top-20 lg:w-[250px] lg:self-start">
+        <aside className="w-full shrink-0 lg:sticky lg:top-content-offset lg:w-[250px] lg:self-start">
             <div className="relative">
                 <Search className="text-text-tertiary pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2" />
                 <Input

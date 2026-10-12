@@ -1,59 +1,75 @@
-import { usePage } from '@inertiajs/react';
-import { ChevronsUpDown } from 'lucide-react';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    useSidebar,
-} from '@/components/ui/sidebar';
-import { UserInfo } from '@/components/user-info';
-import { UserMenuContent } from '@/components/user-menu-content';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Link, router, usePage } from '@inertiajs/react';
+import { LogOut } from 'lucide-react';
+import { UserAvatar } from '@/components/user-avatar';
+import { useSidebar } from '@/components/ui/sidebar';
+import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
+import { logout } from '@/routes';
+import { edit } from '@/routes/profile';
 import type { Auth } from '@/types/auth';
 
+/**
+ * The sidebar's footer account row. The prototype splits it in two: the row
+ * itself goes to the profile, and signing out is its own button beside it — not
+ * an item hidden inside a menu. The header pill carries the full menu.
+ */
 export function NavUser() {
     const { auth } = usePage<{ auth: Auth }>().props;
-    const { state } = useSidebar();
-    const isMobile = useIsMobile();
+    const { state, isMobile } = useSidebar();
+    const cleanup = useMobileNavigation();
 
     if (!auth.user) {
         return null;
     }
 
+    const collapsed = state === 'collapsed' && !isMobile;
+
+    const handleLogout = () => {
+        cleanup();
+        router.flushAll();
+    };
+
     return (
-        <SidebarMenu>
-            <SidebarMenuItem>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <SidebarMenuButton
-                            size="lg"
-                            className="group text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent"
-                            data-test="sidebar-menu-button"
-                        >
-                            <UserInfo user={auth.user} />
-                            <ChevronsUpDown className="ml-auto size-4" />
-                        </SidebarMenuButton>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                        className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-                        align="end"
-                        side={
-                            isMobile
-                                ? 'bottom'
-                                : state === 'collapsed'
-                                  ? 'left'
-                                  : 'bottom'
-                        }
-                    >
-                        <UserMenuContent user={auth.user} />
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="flex items-center gap-1">
+            <Link
+                href={edit()}
+                prefetch
+                onClick={cleanup}
+                title="Mi perfil"
+                className={`flex min-w-0 flex-1 items-center gap-[9px] rounded-[10px] py-1.5 transition-colors hover:bg-black/[.04] ${
+                    collapsed ? 'justify-center px-0' : 'px-2'
+                }`}
+            >
+                <UserAvatar
+                    user={auth.user}
+                    className="size-[30px] text-[11px]"
+                />
+                {!collapsed && (
+                    <div className="grid min-w-0 text-left leading-[1.25]">
+                        <span className="truncate text-[12.5px] font-semibold">
+                            {auth.user.name}
+                        </span>
+                        {auth.roleLabel && (
+                            <span className="truncate text-[11px] text-text-tertiary">
+                                {auth.roleLabel}
+                            </span>
+                        )}
+                    </div>
+                )}
+            </Link>
+
+            {!collapsed && (
+                <Link
+                    href={logout()}
+                    as="button"
+                    onClick={handleLogout}
+                    title="Cerrar sesión"
+                    data-test="logout-button"
+                    className="flex size-8 shrink-0 items-center justify-center rounded-[9px] text-text-tertiary transition-colors hover:bg-[#ffeceb] hover:text-destructive"
+                >
+                    <LogOut className="size-[15px]" />
+                    <span className="sr-only">Cerrar sesión</span>
+                </Link>
+            )}
+        </div>
     );
 }

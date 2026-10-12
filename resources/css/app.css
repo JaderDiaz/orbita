@@ -39,6 +39,16 @@
     --radius-modal: 14px;
     --radius-pill: 999px;
 
+    /*
+     * Shell measurements, from the prototype's chrome. `header` is the sticky
+     * top bar; `content-offset` is where a sticky element inside a page has to
+     * start so it clears the header plus the content container's top padding
+     * (56 + 28). Both are spacing tokens so they work as `h-header`,
+     * `top-content-offset` and so on.
+     */
+    --spacing-header: 56px;
+    --spacing-content-offset: 84px;
+
     --color-background: var(--background);
     --color-foreground: var(--foreground);
 

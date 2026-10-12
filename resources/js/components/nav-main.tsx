@@ -148,15 +148,17 @@ export function NavMain() {
             {navigation.map((group, index) => (
                 <SidebarGroup
                     key={group.label ?? `group-${index}`}
-                    className="px-2 py-0"
+                    className="p-0"
                 >
                     {group.label && (
-                        <SidebarGroupLabel className="text-[10px] font-semibold tracking-[0.1em] text-text-tertiary uppercase">
+                        // The prototype's group title: 10px, letter-spaced,
+                        // uppercase and at normal weight, with no fixed height.
+                        <SidebarGroupLabel className="h-auto px-2.5 pt-1 pb-[3px] text-[10px] font-normal tracking-[0.1em] text-text-tertiary uppercase group-data-[collapsible=icon]:hidden">
                             {group.label}
                         </SidebarGroupLabel>
                     )}
 
-                    <SidebarMenu>
+                    <SidebarMenu className="gap-0.5">
                         {group.items.map((item) => {
                             if (item.children?.length) {
                                 return (
