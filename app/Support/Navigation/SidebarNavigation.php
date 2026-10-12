@@ -46,7 +46,7 @@ class SidebarNavigation
             [
                 'label' => 'Comercial',
                 'items' => [
-                    $this->item('clientes', 'Clientes'),
+                    $this->item('clientes', 'Clientes', route('clientes.index')),
                     $this->item('cotizaciones', 'Cotizaciones'),
                 ],
             ],
