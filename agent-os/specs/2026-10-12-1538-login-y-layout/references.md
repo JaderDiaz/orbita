@@ -18,8 +18,8 @@ Stack confirmado: `laravel/framework ^13.17`, `laravel/fortify ^1.37.2`, `@inert
 
 - **Ubicación:** `node_modules/@inertiajs/react/dist/index.js:169-183`; usos en
   `resources/js/pages/auth/login.tsx:91`, `pages/dashboard.tsx:29`, `pages/settings/security.tsx:133`
-- **Relevancia:** cuando `Page.layout` es un **objeto plano**, Inertia 3 lo trata como *props del
-  layout*, no como componente de layout. Las claves aceptadas son simplemente las que acepte el
+- **Relevancia:** cuando `Page.layout` es un **objeto plano**, Inertia 3 lo trata como _props del
+  layout_, no como componente de layout. Las claves aceptadas son simplemente las que acepte el
   layout resuelto: `title` y `description` para `AuthLayout`, `breadcrumbs` para `AppLayout`.
 - **Orden de precedencia:** props de página → props estáticas del layout → `dynamicLayoutProps`.
 - **Variante dinámica:** `setLayoutProps` se usa en exactamente un lugar,
@@ -41,6 +41,7 @@ Stack confirmado: `laravel/framework ^13.17`, `laravel/fortify ^1.37.2`, `@inert
 ### Tipo de ítem de navegación
 
 - **Ubicación:** `resources/js/types/navigation.ts:9-14`
+
 ```ts
 export type NavItem = {
     title: string;
@@ -49,6 +50,7 @@ export type NavItem = {
     isActive?: boolean;
 };
 ```
+
 - **Relevancia:** `href` acepta objetos de ruta de Wayfinder, no solo strings. Hay que extenderlo
   con `disabled` y envolverlo en grupos.
 
@@ -128,16 +130,16 @@ Ninguno es alcanzable desde `resources/js/app.tsx:13-24`:
 La tabla completa está en la sección "Tokens extraídos del prototipo" de `plan.md`. Resumen de lo
 que no se debe perder:
 
-| Token | Valor |
-|---|---|
-| Sombra canónica de card | `0 1px 2px rgba(0,0,0,.04), 0 8px 24px -6px rgba(0,0,0,.06)` |
-| Anillo de foco (único, todo control) | `border-color:#f97316; box-shadow:0 0 0 4px rgba(249,115,22,.16)` |
-| Botón primario | `#f97316` / `#fff`, `999px`, `0 1px 2px rgba(249,115,22,.3), inset 0 1px 0 rgba(255,255,255,.2)`, hover `#ea580c` |
-| Radio de card | `16px` (no 18px) |
-| Radio de input | `10px`, borde `rgba(0,0,0,.12)`, hover `rgba(0,0,0,.24)` |
-| Sidebar | `244px` / `68px`, `rgba(250,250,252,.85)` + `blur(24px) saturate(180%)` |
-| Header | `56px`, `rgba(245,245,247,.72)` + `blur(20px)` |
-| Stack de fuente | `-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist', system-ui, sans-serif` |
+| Token                                | Valor                                                                                                             |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| Sombra canónica de card              | `0 1px 2px rgba(0,0,0,.04), 0 8px 24px -6px rgba(0,0,0,.06)`                                                      |
+| Anillo de foco (único, todo control) | `border-color:#f97316; box-shadow:0 0 0 4px rgba(249,115,22,.16)`                                                 |
+| Botón primario                       | `#f97316` / `#fff`, `999px`, `0 1px 2px rgba(249,115,22,.3), inset 0 1px 0 rgba(255,255,255,.2)`, hover `#ea580c` |
+| Radio de card                        | `16px` (no 18px)                                                                                                  |
+| Radio de input                       | `10px`, borde `rgba(0,0,0,.12)`, hover `rgba(0,0,0,.24)`                                                          |
+| Sidebar                              | `244px` / `68px`, `rgba(250,250,252,.85)` + `blur(24px) saturate(180%)`                                           |
+| Header                               | `56px`, `rgba(245,245,247,.72)` + `blur(20px)`                                                                    |
+| Stack de fuente                      | `-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist', system-ui, sans-serif`                                |
 
 **Dónde viven los tokens en el prototipo:** no solo en los `style` inline. El bloque de script los
 tiene como constantes — `const ac = "#f97316"` (línea 3844), el mapa `msPal` de badges (3356), los

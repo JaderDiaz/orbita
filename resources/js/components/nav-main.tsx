@@ -138,7 +138,9 @@ export function NavMain() {
                     <SidebarMenu>
                         {group.items.map((item) => {
                             if (item.children?.length) {
-                                return <NestedItem key={item.key} item={item} />;
+                                return (
+                                    <NestedItem key={item.key} item={item} />
+                                );
                             }
 
                             return item.enabled && item.href ? (

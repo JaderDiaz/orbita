@@ -39,15 +39,15 @@ rol. Visualmente idéntico al prototipo. Sin módulos de negocio todavía.
 
 ## Decisiones tomadas
 
-| Pregunta | Decisión |
-|---|---|
-| Roles en el nav | Roles del sistema **ahora**, con nav por rol |
+| Pregunta          | Decisión                                                                     |
+| ----------------- | ---------------------------------------------------------------------------- |
+| Roles en el nav   | Roles del sistema **ahora**, con nav por rol                                 |
 | Sistema de diseño | Aplicar **en este spec**, derivando los valores del uso real en el prototipo |
-| Paleta ⌘K | Fuera de alcance |
-| Modo oscuro | Eliminarlo, solo tema claro |
+| Paleta ⌘K         | Fuera de alcance                                                             |
+| Modo oscuro       | Eliminarlo, solo tema claro                                                  |
 
-Nota del usuario sobre el diseño: *"adapta el uso de los colores y estilos a los aplicados en el
-diseño"*. Por eso los tokens de abajo salen de extraer el prototipo, no de una propuesta mía. Dos
+Nota del usuario sobre el diseño: _"adapta el uso de los colores y estilos a los aplicados en el
+diseño"_. Por eso los tokens de abajo salen de extraer el prototipo, no de una propuesta mía. Dos
 cosas que yo había asumido mal y quedan corregidas: las cards son de **16px** (los 18px son solo el
 hero oscuro y la paleta ⌘K), y la fuente primaria es **SF Pro con Geist como fallback**, no Geist
 primero.
@@ -62,6 +62,7 @@ saturate(180%)` · header `rgba(245,245,247,.72)` con `blur(20px)` · card `#fff
 (segmentado).
 
 Glow del shell, verbatim:
+
 ```css
 radial-gradient(900px 360px at 85% -120px, rgba(249,115,22,.09), transparent 70%),
 radial-gradient(700px 300px at 10% -140px, rgba(99,102,241,.06), transparent 70%)
@@ -78,18 +79,23 @@ superficie `#fff7ed`, borde tintado `#fed7aa`. Se usa con disciplina: **una** ac
 sólida por pantalla, más estados y rings.
 
 Anillo de foco único para todo control interactivo, verbatim:
+
 ```css
 border-color: #f97316;
-box-shadow: 0 0 0 4px rgba(249,115,22,.16);
+box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.16);
 ```
 
 **Radios** — botones y chips `999px` (pill) · **card `16px`** · hero oscuro y paleta `18px` ·
 modal `14px` · **inputs, selects, textarea `10px`** · ítem de nav `9px` · badge `999px`.
 
 **Elevación** — la sombra canónica, repetida en casi toda card:
+
 ```css
-box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 24px -6px rgba(0,0,0,.06);
+box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px -6px rgba(0, 0, 0, 0.06);
 ```
+
 Botón primario: `0 1px 2px rgba(249,115,22,.3), inset 0 1px 0 rgba(255,255,255,.2)`.
 
 **Tipografía** — `-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Geist', system-ui, sans-serif`;
@@ -116,7 +122,7 @@ proyectos `#f97316` · documentos `#32ade6` · facturas `#34c759` · egresos `#f
 `#af52de` · tiempo `#ff9f0a` · configuración `#8e8e93`.
 
 **Chip de filtro** — activo es **oscuro** (`#1d1d1f` fondo, `#fff` texto), no naranja. El naranja
-(`#fff7ed`/`#c2410c`/borde `#f97316`) es para *selección*, no para filtro activo.
+(`#fff7ed`/`#c2410c`/borde `#f97316`) es para _selección_, no para filtro activo.
 
 ## Tareas
 
@@ -206,10 +212,10 @@ Estructura con grupos, derivada del prototipo:
 type NavGroup = { label?: string; items: NavItem[] };
 ```
 
-- **admin** — `Panel` · grupo *Comercial*: Clientes, Cotizaciones · grupo *Operación*: Proyectos,
-  Documentos · grupo *Finanzas*: Facturas y pagos, Egresos · grupo *Administración*: Equipo y
+- **admin** — `Panel` · grupo _Comercial_: Clientes, Cotizaciones · grupo _Operación_: Proyectos,
+  Documentos · grupo _Finanzas_: Facturas y pagos, Egresos · grupo _Administración_: Equipo y
   costos, Configuración (colapsable: Usuarios y roles, Parámetros, Maestros y listas)
-- **member** — `Mi panel` · grupo *Operación*: Proyectos, Mi tiempo, Documentos
+- **member** — `Mi panel` · grupo _Operación_: Proyectos, Mi tiempo, Documentos
 
 Los destinos que aún no existen quedan deshabilitados y visibles, no ocultos: el nav es el mapa del
 producto y ocultarlos lo haría mentir. Un ítem deshabilitado no navega.
@@ -280,24 +286,24 @@ No vale la pena testear: colores, render del sidebar, snapshots de props de Iner
 
 ## Archivos principales
 
-| Archivo | Qué pasa |
-|---|---|
-| `app/Enums/SystemRole.php` | nuevo |
-| `database/migrations/*_add_system_role_to_users_table.php` | nuevo, con los invariantes en SQL |
-| `app/Models/User.php` | cast del enum y helpers |
-| `app/Policies/UserPolicy.php` | nuevo |
-| `app/Providers/AppServiceProvider.php` | `Gate::before` del owner |
-| `app/Http/Middleware/HandleInertiaRequests.php` | compartir rol y nav resuelto |
-| `database/seeders/DatabaseSeeder.php` | owner + member |
-| `resources/css/app.css` | tokens del prototipo, sin bloque `.dark` |
-| `vite.config.ts` | Geist y Geist Mono en lugar de Instrument Sans |
-| `resources/js/config/navigation.ts` | nuevo, fuente única del nav |
-| `resources/js/components/app-sidebar.tsx` | shell visual y grupos por rol |
-| `resources/js/components/app-sidebar-header.tsx` | header 56px translúcido |
-| `resources/js/components/ui/{button,input,select}.tsx` | variantes del prototipo |
-| `resources/js/layouts/auth/auth-simple-layout.tsx` | piel del login |
-| `resources/js/types/global.d.ts` | tipar las props compartidas nuevas |
-| borrados | `app-header.tsx`, `app-header-layout.tsx`, `auth-card-layout.tsx`, `auth-split-layout.tsx`, `use-appearance.tsx`, `appearance-tabs.tsx`, `pages/settings/appearance.tsx` |
+| Archivo                                                    | Qué pasa                                                                                                                                                                 |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `app/Enums/SystemRole.php`                                 | nuevo                                                                                                                                                                    |
+| `database/migrations/*_add_system_role_to_users_table.php` | nuevo, con los invariantes en SQL                                                                                                                                        |
+| `app/Models/User.php`                                      | cast del enum y helpers                                                                                                                                                  |
+| `app/Policies/UserPolicy.php`                              | nuevo                                                                                                                                                                    |
+| `app/Providers/AppServiceProvider.php`                     | `Gate::before` del owner                                                                                                                                                 |
+| `app/Http/Middleware/HandleInertiaRequests.php`            | compartir rol y nav resuelto                                                                                                                                             |
+| `database/seeders/DatabaseSeeder.php`                      | owner + member                                                                                                                                                           |
+| `resources/css/app.css`                                    | tokens del prototipo, sin bloque `.dark`                                                                                                                                 |
+| `vite.config.ts`                                           | Geist y Geist Mono en lugar de Instrument Sans                                                                                                                           |
+| `resources/js/config/navigation.ts`                        | nuevo, fuente única del nav                                                                                                                                              |
+| `resources/js/components/app-sidebar.tsx`                  | shell visual y grupos por rol                                                                                                                                            |
+| `resources/js/components/app-sidebar-header.tsx`           | header 56px translúcido                                                                                                                                                  |
+| `resources/js/components/ui/{button,input,select}.tsx`     | variantes del prototipo                                                                                                                                                  |
+| `resources/js/layouts/auth/auth-simple-layout.tsx`         | piel del login                                                                                                                                                           |
+| `resources/js/types/global.d.ts`                           | tipar las props compartidas nuevas                                                                                                                                       |
+| borrados                                                   | `app-header.tsx`, `app-header-layout.tsx`, `auth-card-layout.tsx`, `auth-split-layout.tsx`, `use-appearance.tsx`, `appearance-tabs.tsx`, `pages/settings/appearance.tsx` |
 
 ## Verificación
 

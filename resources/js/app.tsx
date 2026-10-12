@@ -5,7 +5,10 @@ import AppLayout from '@/layouts/app-layout';
 import AuthLayout from '@/layouts/auth-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+// Fixed rather than read from VITE_APP_NAME: Vite resolves that from the
+// .env file, not from the container environment, and an internal tool does not
+// rename itself per environment.
+const appName = 'Orbita';
 
 void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),

@@ -9,103 +9,103 @@ name: orbita
 # Compose also reads .env, so the variables can be persisted there.
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    ports:
-      - "${ORBITA_APP_PORT:-8100}:80"
-    environment:
-      SERVER_NAME: ":80"
-      APP_NAME: Orbita
-      APP_URL: "http://localhost:${ORBITA_APP_PORT:-8100}"
-      APP_TIMEZONE: America/Bogota
-      APP_LOCALE: es
-      APP_FALLBACK_LOCALE: es
-      DB_CONNECTION: pgsql
-      DB_HOST: postgres
-      DB_PORT: "5432"
-      DB_DATABASE: orbita
-      DB_USERNAME: orbita
-      DB_PASSWORD: orbita
-      # PostgreSQL backs cache, sessions and queues: the tables already exist
-      # and it removes Redis from the stack until load justifies it.
-      CACHE_STORE: database
-      SESSION_DRIVER: database
-      QUEUE_CONNECTION: database
-      # No mail service in the stack; outgoing mail goes to the log.
-      MAIL_MAILER: log
-    volumes:
-      - .:/app
-      - vendor:/app/vendor
-      - caddy-data:/data
-      - caddy-config:/config
-    depends_on:
-      postgres:
-        condition: service_healthy
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        ports:
+            - '${ORBITA_APP_PORT:-8100}:80'
+        environment:
+            SERVER_NAME: ':80'
+            APP_NAME: Orbita
+            APP_URL: 'http://localhost:${ORBITA_APP_PORT:-8100}'
+            APP_TIMEZONE: America/Bogota
+            APP_LOCALE: es
+            APP_FALLBACK_LOCALE: es
+            DB_CONNECTION: pgsql
+            DB_HOST: postgres
+            DB_PORT: '5432'
+            DB_DATABASE: orbita
+            DB_USERNAME: orbita
+            DB_PASSWORD: orbita
+            # PostgreSQL backs cache, sessions and queues: the tables already exist
+            # and it removes Redis from the stack until load justifies it.
+            CACHE_STORE: database
+            SESSION_DRIVER: database
+            QUEUE_CONNECTION: database
+            # No mail service in the stack; outgoing mail goes to the log.
+            MAIL_MAILER: log
+        volumes:
+            - .:/app
+            - vendor:/app/vendor
+            - caddy-data:/data
+            - caddy-config:/config
+        depends_on:
+            postgres:
+                condition: service_healthy
 
-  postgres:
-    image: postgres:18-alpine
-    restart: unless-stopped
-    ports:
-      - "${ORBITA_DB_PORT:-5433}:5432"
-    environment:
-      POSTGRES_DB: orbita
-      POSTGRES_USER: orbita
-      POSTGRES_PASSWORD: orbita
-    # Postgres 18+ expects a single mount at /var/lib/postgresql, not .../data.
-    volumes:
-      - postgres-data:/var/lib/postgresql
-      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U orbita -d orbita"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+    postgres:
+        image: postgres:18-alpine
+        restart: unless-stopped
+        ports:
+            - '${ORBITA_DB_PORT:-5433}:5432'
+        environment:
+            POSTGRES_DB: orbita
+            POSTGRES_USER: orbita
+            POSTGRES_PASSWORD: orbita
+        # Postgres 18+ expects a single mount at /var/lib/postgresql, not .../data.
+        volumes:
+            - postgres-data:/var/lib/postgresql
+            - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -U orbita -d orbita']
+            interval: 5s
+            timeout: 5s
+            retries: 10
 
-  # Runs on the app image on purpose: the Wayfinder Vite plugin shells out to
-  # `php artisan wayfinder:generate`, so a PHP-less container cannot serve it.
-  vite:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    working_dir: /app
-    ports:
-      - "${ORBITA_VITE_PORT:-5274}:5173"
-    environment:
-      APP_URL: "http://localhost:${ORBITA_APP_PORT:-8100}"
-      # The browser reaches Vite on the published port, not the internal one.
-      VITE_HOST_PORT: "${ORBITA_VITE_PORT:-5274}"
-      DB_CONNECTION: pgsql
-      DB_HOST: postgres
-      DB_PORT: "5432"
-      DB_DATABASE: orbita
-      DB_USERNAME: orbita
-      DB_PASSWORD: orbita
-    # This service runs Vite, not the web server, so the app image's
-    # port-80 healthcheck would never pass.
-    healthcheck:
-      disable: true
-    # Skip the app entrypoint: this service must not run migrations.
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - >
-        if [ ! -f vendor/autoload.php ]; then composer install --no-interaction --prefer-dist --no-progress; fi &&
-        if [ ! -d node_modules/.pnpm ]; then pnpm install --frozen-lockfile; fi &&
-        pnpm run dev
-    volumes:
-      - .:/app
-      - vendor:/app/vendor
-      - node-modules:/app/node_modules
-    depends_on:
-      app:
-        condition: service_started
+    # Runs on the app image on purpose: the Wayfinder Vite plugin shells out to
+    # `php artisan wayfinder:generate`, so a PHP-less container cannot serve it.
+    vite:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        working_dir: /app
+        ports:
+            - '${ORBITA_VITE_PORT:-5274}:5173'
+        environment:
+            APP_URL: 'http://localhost:${ORBITA_APP_PORT:-8100}'
+            # The browser reaches Vite on the published port, not the internal one.
+            VITE_HOST_PORT: '${ORBITA_VITE_PORT:-5274}'
+            DB_CONNECTION: pgsql
+            DB_HOST: postgres
+            DB_PORT: '5432'
+            DB_DATABASE: orbita
+            DB_USERNAME: orbita
+            DB_PASSWORD: orbita
+        # This service runs Vite, not the web server, so the app image's
+        # port-80 healthcheck would never pass.
+        healthcheck:
+            disable: true
+        # Skip the app entrypoint: this service must not run migrations.
+        entrypoint: ['/bin/sh', '-c']
+        command:
+            - >
+                if [ ! -f vendor/autoload.php ]; then composer install --no-interaction --prefer-dist --no-progress; fi &&
+                if [ ! -d node_modules/.pnpm ]; then pnpm install --frozen-lockfile; fi &&
+                pnpm run dev
+        volumes:
+            - .:/app
+            - vendor:/app/vendor
+            - node-modules:/app/node_modules
+        depends_on:
+            app:
+                condition: service_started
 
 volumes:
-  postgres-data:
-  vendor:
-  node-modules:
-  caddy-data:
-  caddy-config:
+    postgres-data:
+    vendor:
+    node-modules:
+    caddy-data:
+    caddy-config:

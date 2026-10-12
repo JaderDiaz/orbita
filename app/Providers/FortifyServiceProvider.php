@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Enums\SystemRole;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -36,11 +37,33 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::loginView(fn (Request $request) => Inertia::render('auth/login', [
             'status' => $request->session()->get('status'),
+            // Quick-fill for the seeded accounts, never exposed in production.
+            'demoAccounts' => $this->demoAccounts(),
         ]));
 
         Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/two-factor-challenge'));
 
         Fortify::confirmPasswordView(fn () => Inertia::render('auth/confirm-password'));
+    }
+
+    /**
+     * The seeded demo logins, only while debugging.
+     *
+     * @return list<array{email: string, role: string}>
+     */
+    private function demoAccounts(): array
+    {
+        if (! config('app.debug')) {
+            return [];
+        }
+
+        /** @var list<array{name: string, email: string, role: SystemRole}> $accounts */
+        $accounts = config('orbita.demo_accounts', []);
+
+        return array_map(fn (array $account): array => [
+            'email' => $account['email'],
+            'role' => $account['role']->label(),
+        ], $accounts);
     }
 
     /**

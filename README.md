@@ -50,10 +50,10 @@ un volumen nombrado), copia `.env` desde `.env.example` si falta y corre las mig
 
 Son tres servicios y nada más: `app`, `postgres` y `vite`.
 
-| Servicio | URL / puerto |
-|---|---|
-| Aplicación | http://localhost:8100 |
-| Vite (HMR) | http://localhost:5274 |
+| Servicio   | URL / puerto                                         |
+| ---------- | ---------------------------------------------------- |
+| Aplicación | http://localhost:8100                                |
+| Vite (HMR) | http://localhost:5274                                |
 | PostgreSQL | `localhost:5433` · usuario `orbita` / clave `orbita` |
 
 Dos bases lógicas en el mismo contenedor: `orbita` para desarrollo y `orbita_test` para la

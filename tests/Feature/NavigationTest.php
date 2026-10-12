@@ -97,6 +97,20 @@ class NavigationTest extends TestCase
         }
     }
 
+    /**
+     * Both roles land on the same route; the screen titles itself per role.
+     */
+    public function test_the_dashboard_titles_itself_per_role(): void
+    {
+        $this->actingAs(User::factory()->admin()->create())
+            ->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page->where('auth.role', 'admin'));
+
+        $this->actingAs(User::factory()->member()->create())
+            ->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page->where('auth.role', 'member'));
+    }
+
     public function test_the_role_is_shared_with_its_spanish_label(): void
     {
         $this->actingAs(User::factory()->member()->create())

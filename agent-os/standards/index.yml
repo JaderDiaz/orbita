@@ -1,31 +1,31 @@
 backend:
-  authorization:
-    description: System roles as a PHP enum vs editable job titles, the fail-closed money boundary for Miembros, and the owner invariant
-  catalog-master-data:
-    description: Maestros y Listas schema, system_key and flags for safe gating, and why catalog values are never compared by name
-  document-numbering:
-    description: Concurrency-safe per-client document series, numbers assigned at issue, and DIAN series limits
-  money:
-    description: Money stored as bigint minor units with a currency column, never float
-  settings-parameters:
-    description: Parametros schema in code with only overrides in the database, typed accessors and caching
-  taxes-colombia:
-    description: IVA, Retefuente, ReteICA per mil and ReteIVA on the IVA amount, with explicit unit and base columns plus rounding order
+    authorization:
+        description: System roles as a PHP enum vs editable job titles, the fail-closed money boundary for Miembros, and the owner invariant
+    catalog-master-data:
+        description: Maestros y Listas schema, system_key and flags for safe gating, and why catalog values are never compared by name
+    document-numbering:
+        description: Concurrency-safe per-client document series, numbers assigned at issue, and DIAN series limits
+    money:
+        description: Money stored as bigint minor units with a currency column, never float
+    settings-parameters:
+        description: Parametros schema in code with only overrides in the database, typed accessors and caching
+    taxes-colombia:
+        description: IVA, Retefuente, ReteICA per mil and ReteIVA on the IVA amount, with explicit unit and base columns plus rounding order
 
 database:
-  postgres:
-    description: PostgreSQL 18 invariants in the database, derived vs stored state, views for rollups, and why tests never use SQLite
+    postgres:
+        description: PostgreSQL 18 invariants in the database, derived vs stored state, views for rollups, and why tests never use SQLite
 
 global:
-  conventions:
-    description: English code with Spanish domain vocabulary, idiomatic Laravel directory layout, and commit style
-  tech-stack:
-    description: Approved stack and the login-plus-2FA-only authentication posture
+    conventions:
+        description: English code with Spanish domain vocabulary, idiomatic Laravel directory layout, and commit style
+    tech-stack:
+        description: Approved stack and the login-plus-2FA-only authentication posture
 
 javascript:
-  react-inertia:
-    description: Inertia 3 and React structure, Wayfinder build-time route generation and its failure mode, container-presentational split
+    react-inertia:
+        description: Inertia 3 and React structure, Wayfinder build-time route generation and its failure mode, container-presentational split
 
 testing:
-  testing:
-    description: Test priority order for finance-touching code, database-free unit tests for app/Support, and what not to test
+    testing:
+        description: Test priority order for finance-touching code, database-free unit tests for app/Support, and what not to test

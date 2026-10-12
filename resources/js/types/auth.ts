@@ -18,7 +18,6 @@ export type Auth = {
     roleLabel: string | null;
 };
 
-
 export type TwoFactorSetupData = {
     svg: string;
     url: string;

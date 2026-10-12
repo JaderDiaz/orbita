@@ -70,6 +70,27 @@ class OwnerProtectionTest extends TestCase
         $this->assertFalse($member->can('viewAny', User::class));
     }
 
+    /**
+     * Regression: the seeder used firstOrCreate, which leaves an existing row
+     * untouched. An account created earlier without a role stayed a member,
+     * and the installation ended up with no owner at all.
+     */
+    public function test_the_seeder_corrects_an_existing_account_with_the_wrong_role(): void
+    {
+        User::factory()->create([
+            'email' => 'owner@orbita.co',
+            'system_role' => SystemRole::Member,
+            'is_owner' => false,
+        ]);
+
+        $this->seed();
+
+        $owner = User::where('email', 'owner@orbita.co')->sole();
+
+        $this->assertSame(SystemRole::Owner, $owner->system_role);
+        $this->assertTrue($owner->is_owner);
+    }
+
     public function test_the_seeder_creates_exactly_one_owner(): void
     {
         $this->seed();

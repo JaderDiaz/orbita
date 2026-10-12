@@ -14,6 +14,7 @@
     'consumed_by' => ['Login', 'Perfil'],
 ],
 ```
+
 ```sql
 setting_values(key citext primary key, value jsonb, updated_by, updated_at)
 ```

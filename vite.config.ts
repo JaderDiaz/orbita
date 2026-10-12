@@ -9,6 +9,13 @@ import { defineConfig, lazyPlugins } from 'vite-plus';
 
 const VITE_HOST_PORT = Number(process.env.VITE_HOST_PORT ?? 5274);
 
+// The page is served by the app container on a different port, so the dev
+// server has to allow it explicitly: setting server.origin makes Vite answer
+// with its own origin in Access-Control-Allow-Origin, which the browser then
+// rejects. Only visible in a browser — the production build serves assets
+// from the app itself.
+const APP_ORIGIN = process.env.APP_URL ?? 'http://localhost:8100';
+
 export default defineConfig({
     plugins: lazyPlugins(() => [
         laravel({
@@ -40,11 +47,20 @@ export default defineConfig({
         // origin and the HMR client must point there or assets 404.
         port: 5173,
         origin: `http://localhost:${VITE_HOST_PORT}`,
+        cors: {
+            origin: [APP_ORIGIN],
+            credentials: true,
+        },
         hmr: {
             host: 'localhost',
             clientPort: VITE_HOST_PORT,
         },
         watch: {
+            // Filesystem events do not cross Colima's virtiofs mount
+            // reliably, so the dev server misses edits and HMR goes stale.
+            // Polling is the cost of running Vite inside the container.
+            usePolling: true,
+            interval: 300,
             ignored: [
                 '**/.agents/**',
                 '**/.claude/**',

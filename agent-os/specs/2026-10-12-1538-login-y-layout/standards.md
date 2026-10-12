@@ -28,7 +28,7 @@ Defense in depth, in this order. UI hiding is not enforcement.
 2. **Queries** — a global scope for members limiting projects to those they are assigned to,
    propagated to tareas, fases, tiempos and documentos. A member cannot reach another project's
    row even by ID.
-3. **Attributes, fail closed** — a `Monetary` cast that returns `null` *and logs* when
+3. **Attributes, fail closed** — a `Monetary` cast that returns `null` _and logs_ when
    `Gate::denies('finance.view')`. Money never reaches the serializer, even through a careless
    `->toArray()`.
 4. **Separate read models** — members query an explicit column list with no money columns at
@@ -138,11 +138,11 @@ Conventional Commits. No AI attribution, no `Co-Authored-By`.
   unique indexes, check constraints, `citext`, jsonb operators, recursive CTEs — does not exist
   or differs in SQLite.
 - Put invariants in the database, not only in PHP:
-  - `on delete restrict` on every FK that protects history
-  - partial unique indexes (`unique (list_id) where is_default`)
-  - check constraints for enum-like text columns and the owner invariant
-  - a statement-level trigger validating `sum(fases.pct) = 100` per project
-  - a trigger rejecting updates to an issued financial document
+    - `on delete restrict` on every FK that protects history
+    - partial unique indexes (`unique (list_id) where is_default`)
+    - check constraints for enum-like text columns and the owner invariant
+    - a statement-level trigger validating `sum(fases.pct) = 100` per project
+    - a trigger rejecting updates to an issued financial document
 - **Derive, don't store, what is a function of other columns.** `Vencida` is
   `vence < today AND saldo > 0`, not a stored state. Store lifecycle states only.
 - Compute rollups with views (`project_profitability`, `client_balances`,

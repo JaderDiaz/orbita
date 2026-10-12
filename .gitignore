@@ -48,3 +48,6 @@ yarn-error.log
 
 # gentle-ai skill registry: regenerable and machine-specific
 /.atl
+
+# Playwright MCP artefacts
+/.playwright-mcp

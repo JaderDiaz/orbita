@@ -2,12 +2,12 @@
 
 The four taxes are **not four of the same thing**. Each needs an explicit unit and base.
 
-| Tax | Rate | Unit | Base | Sign |
-|---|---|---|---|---|
-| IVA | 19 | percent | subtotal | adds |
-| Retefuente | 11 | percent | subtotal (pre-IVA) | withholds |
-| ReteICA | 9.66 | **permil** | subtotal | withholds |
-| ReteIVA | 15 | percent | **the IVA amount** | withholds |
+| Tax        | Rate | Unit       | Base               | Sign      |
+| ---------- | ---- | ---------- | ------------------ | --------- |
+| IVA        | 19   | percent    | subtotal           | adds      |
+| Retefuente | 11   | percent    | subtotal (pre-IVA) | withholds |
+| ReteICA    | 9.66 | **permil** | subtotal           | withholds |
+| ReteIVA    | 15   | percent    | **the IVA amount** | withholds |
 
 ```sql
 document_taxes(

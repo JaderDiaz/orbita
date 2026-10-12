@@ -21,15 +21,15 @@ interno con navegación por rol, sobre el sistema de diseño del prototipo.
 
 ## Decisiones
 
-| Decisión | Razón |
-|---|---|
+| Decisión                                | Razón                                                                                                                                                                                             |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Roles del sistema **ahora**, no después | La frontera de permisos no conviene retrofitearla. El rol decide qué ve cada usuario en el nav y más adelante qué datos recibe; introducirlo después implica revisar cada pantalla ya construida. |
-| Tokens de diseño **en este spec** | Cada pantalla nueva nace con los colores y radios que encuentre. Aplicarlos con dos pantallas es barato; con veinte es un barrido completo. |
-| ⌘K **fuera** | No existen las entidades que indexaría. Solo podría listar secciones del nav. |
-| Modo oscuro **eliminado** | El prototipo define un único tema claro y no tiene media queries. Mantener oscuro obliga a interpretar cada pantalla dos veces y a duplicar cada token. |
+| Tokens de diseño **en este spec**       | Cada pantalla nueva nace con los colores y radios que encuentre. Aplicarlos con dos pantallas es barato; con veinte es un barrido completo.                                                       |
+| ⌘K **fuera**                            | No existen las entidades que indexaría. Solo podría listar secciones del nav.                                                                                                                     |
+| Modo oscuro **eliminado**               | El prototipo define un único tema claro y no tiene media queries. Mantener oscuro obliga a interpretar cada pantalla dos veces y a duplicar cada token.                                           |
 
-Instrucción explícita del usuario sobre el diseño: *"adapta el uso de los colores y estilos a los
-aplicados en el diseño"*. Por eso los tokens se extrajeron del prototipo en lugar de proponerse.
+Instrucción explícita del usuario sobre el diseño: _"adapta el uso de los colores y estilos a los
+aplicados en el diseño"_. Por eso los tokens se extrajeron del prototipo en lugar de proponerse.
 
 ### Decisiones de implementación derivadas
 
@@ -65,7 +65,7 @@ Dos cosas que se habían asumido mal y la extracción del prototipo corrigió:
 ## Hallazgos sobre el uso del color
 
 - El **chip de filtro activo es oscuro** (`#1d1d1f` fondo, `#fff` texto), no naranja. El naranja
-  (`#fff7ed`/`#c2410c`/borde `#f97316`) está reservado para *selección*, que es otra cosa.
+  (`#fff7ed`/`#c2410c`/borde `#f97316`) está reservado para _selección_, que es otra cosa.
 - Hay **un solo anillo de foco** repetido en todo control interactivo. Es un token reutilizable, no
   una decisión por componente.
 - Los **tiles de icono del sidebar tienen un hue por sección**. El naranja no domina el nav; se usa
