@@ -19,6 +19,10 @@ abstract class TestCase extends BaseTestCase
         'DB_DATABASE',
         'DB_USERNAME',
         'DB_PASSWORD',
+        'CACHE_STORE',
+        'SESSION_DRIVER',
+        'QUEUE_CONNECTION',
+        'MAIL_MAILER',
     ];
 
     protected function setUp(): void
@@ -33,6 +37,13 @@ abstract class TestCase extends BaseTestCase
      * development database into $_SERVER. PHPUnit's <env force="true"> only sets
      * putenv() and $_ENV, so without this the suite would silently run against the
      * development database and RefreshDatabase would wipe it.
+     *
+     * The same hole applies to every key Compose sets: it also injects
+     * CACHE_STORE, SESSION_DRIVER, QUEUE_CONNECTION and MAIL_MAILER as `database`
+     * or `log`, so the suite was running against the database cache, the database
+     * session store and the database queue instead of the array and sync drivers
+     * phpunit.xml declares. A cache assertion silently measured a database round
+     * trip, which is how this was found.
      *
      * Copying the resolved values into $_SERVER before the application boots keeps
      * phpunit.xml the single source of truth. Guarded by TestDatabaseTargetTest.
