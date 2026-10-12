@@ -42,3 +42,9 @@ yarn-error.log
 /boost.json
 /opencode.json
 /opencode.jsonc
+
+/.pnpm-store
+/public/hot
+
+# gentle-ai skill registry: regenerable and machine-specific
+/.atl

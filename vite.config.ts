@@ -7,6 +7,8 @@ import laravel from 'laravel-vite-plugin';
 import { bunny } from 'laravel-vite-plugin/fonts';
 import { defineConfig, lazyPlugins } from 'vite-plus';
 
+const VITE_HOST_PORT = Number(process.env.VITE_HOST_PORT ?? 5274);
+
 export default defineConfig({
     plugins: lazyPlugins(() => [
         laravel({
@@ -29,6 +31,16 @@ export default defineConfig({
         }),
     ]),
     server: {
+        host: '0.0.0.0',
+        // Vite always binds 5173 inside the container; Docker publishes it on
+        // ORBITA_VITE_PORT. The browser only ever sees the published port, so
+        // origin and the HMR client must point there or assets 404.
+        port: 5173,
+        origin: `http://localhost:${VITE_HOST_PORT}`,
+        hmr: {
+            host: 'localhost',
+            clientPort: VITE_HOST_PORT,
+        },
         watch: {
             ignored: [
                 '**/.agents/**',
