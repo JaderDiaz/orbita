@@ -73,7 +73,7 @@ class SidebarNavigation
                         'children' => [
                             $this->item('usuarios', 'Usuarios y roles'),
                             $this->item('parametros', 'Parámetros'),
-                            $this->item('maestros', 'Maestros y listas'),
+                            $this->item('maestros', 'Maestros y listas', route('maestros.index')),
                         ],
                     ],
                 ],
