@@ -221,6 +221,10 @@ deps: ## Install the PHP and JavaScript dependencies
 	$(APP) composer install
 	$(PNPM) install
 
+.PHONY: autoload
+autoload: ## Rebuild the composer class map after adding a PHP class
+	$(APP) composer dump-autoload
+
 .PHONY: routes
 routes: ## List the registered routes
 	$(ARTISAN) route:list
