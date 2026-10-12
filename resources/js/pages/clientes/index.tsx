@@ -1,6 +1,6 @@
 import { Head, Link, router, setLayoutProps } from '@inertiajs/react';
 import { Plus, Search, X } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -60,7 +60,6 @@ export default function ClientesIndex({
     opciones_filas,
 }: Props) {
     const [buscar, setBuscar] = useState(filtros.buscar);
-    const first = useRef(true);
 
     setLayoutProps({
         breadcrumbs: [
@@ -70,10 +69,13 @@ export default function ClientesIndex({
     });
 
     // Debounced so typing does not fire a request per keystroke.
+    //
+    // The guard compares against what the server already has rather than
+    // tracking the first render: React runs effects twice in strict mode, so a
+    // mount flag let a redundant request through and rewrote the URL with every
+    // filter on it.
     useEffect(() => {
-        if (first.current) {
-            first.current = false;
-
+        if (buscar === filtros.buscar) {
             return;
         }
 
