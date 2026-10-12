@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import { ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
     Collapsible,
     CollapsibleContent,
@@ -72,8 +72,23 @@ function LinkItem({ item }: { item: SharedNavItem }) {
 }
 
 function NestedItem({ item }: { item: SharedNavItem }) {
-    const [open, setOpen] = useState(false);
+    const { isCurrentOrParentUrl } = useCurrentUrl();
     const children = item.children ?? [];
+
+    // The group opens itself when the current page is one of its children.
+    // Without this, navigating straight to a nested module left the group
+    // collapsed and nothing in the sidebar indicated where the user was.
+    const hasActiveChild = children.some(
+        (child) => child.href !== null && isCurrentOrParentUrl(child.href),
+    );
+
+    const [open, setOpen] = useState(hasActiveChild);
+
+    useEffect(() => {
+        if (hasActiveChild) {
+            setOpen(true);
+        }
+    }, [hasActiveChild]);
 
     return (
         <Collapsible open={open} onOpenChange={setOpen} asChild>
@@ -91,7 +106,13 @@ function NestedItem({ item }: { item: SharedNavItem }) {
                         {children.map((child) =>
                             child.enabled && child.href ? (
                                 <SidebarMenuSubItem key={child.key}>
-                                    <SidebarMenuSubButton asChild>
+                                    <SidebarMenuSubButton
+                                        asChild
+                                        isActive={isCurrentOrParentUrl(
+                                            child.href,
+                                        )}
+                                        className="data-[active=true]:bg-brand/10 data-[active=true]:text-brand-text data-[active=true]:font-semibold"
+                                    >
                                         <Link href={child.href} prefetch>
                                             <span>{child.title}</span>
                                         </Link>
